@@ -15,6 +15,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
+    - name: Pre Deployment Deploy
+      uses: appleboy/ssh-action@master
+      with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            rm -rf nodejs-deploy
     - name: Install Dependencies
       run: npm install
       # Deploy the artifact into  instance
@@ -34,7 +43,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            rm -rf nodejs-deploy && mkdir nodejs-deploy
             # pm2 restart app
               
               

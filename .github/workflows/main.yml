@@ -43,6 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # pm2 restart app
+            # pm2 start --name=app npm -- start
+            pm2 restart app
               
               

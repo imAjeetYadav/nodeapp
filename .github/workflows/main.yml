@@ -1,0 +1,39 @@
+name: NodeJS
+
+on:
+  # push:
+    # branches:
+     # - master
+  workflow_dispatch:
+
+jobs:
+  nodejs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Install Dependencies
+      run: npm install
+      # Deploy the artifact into  instance
+    - name: Nodejs app Deploy
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        REMOTE_USER: ${{ secrets.USERNAME }}
+      # Post deployment
+    - name: Post Deploy
+      uses: appleboy/ssh-action@maste
+      with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            rm -rf deploy && mkdir deploy
+            # pm2 restart app
+              
+              
